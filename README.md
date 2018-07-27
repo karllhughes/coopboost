@@ -98,6 +98,20 @@ This will go through the database of accounts, find the accounts that were follo
 - Adding keywords to find tweets to favorite
 - Searching through the profile of users who follow me, then sending a targeted DM (or is that era over and now perceived as super spammy?)
 
+## Local Development (With Docker)
+
+- Clone this repository: `git clone git@github.com:karllhughes/coopboost.git`
+- Install npm dependencies: `cd coopboost && docker run --rm -v $(pwd):/app -w /app node:8 npm i`
+- Run a mongo DB container: `docker run --rm -d -v coopboost-db-vol:/data/db -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=root -p 27017:27017 --name coopboost-db mongo:3.2-jessie`
+- Copy `.env.example` to `.env` and update it with your credentials
+- Seed people to find followers from: `docker run --rm -v $(pwd):/app --link coopboost-db -w /app --env-file=./.env node:8 node tasks/add-seeds.js karllhughes`
+- Seed the database with potential followees: `docker run --rm -v $(pwd):/app --link coopboost-db -w /app --env-file=./.env node:8 node tasks/add-followers.js`
+- Follow these people: `docker run --rm -v $(pwd):/app --link coopboost-db -w /app --env-file=./.env node:8 node tasks/follow.js`
+- Unfollow people who haven't followed you: `docker run --rm -v $(pwd):/app --link coopboost-db -w /app --env-file=./.env node:8 node tasks/unfollow.js`
+
+### Connecting locally
+- Debug mongo via CLI: `docker run --rm -it --link coopboost-db mongo:3.2-jessie mongo mongodb://root:root@coopboost-db:27017/admin`
+
 ## Questions or complaints?
 
 Tweet at me [@andyjiang](https://twitter.com/andyjiang).
