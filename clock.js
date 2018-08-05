@@ -12,7 +12,8 @@ const co = require('co')
  */
 
 new CronJob({
-  cronTime: "00 30 11 * * 1-5",
+  // cronTime: "00 30 11 * * 1-5",
+  cronTime: "5 0/3 * * *",
   onTick: co(bot()),
   start: true,
   timeZone: "America/Los_Angeles"
